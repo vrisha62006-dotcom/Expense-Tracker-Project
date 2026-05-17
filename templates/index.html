@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Add Expense</h2>
+
+      {% with messages = get_flashed_messages() %} {% if messages %} {% for msg
+      in messages %}
+      <p class="error">{{msg}}</p>
+      {% endfor %} {% endif %} {% endwith %}
+      <div class="form-box">
+        <form method="post" action="/add">
+          <label>Name :</label>
+          <input
+            type="text"
+            name="name"
+            required
+            placeholder="Enter name "
+            value="{{form_data.name if form_data else ''}}"
+          />
+          {% if errors and errors.name %}
+          <div class="error">{{errors.name}}</div>
+          {% endif %}
+          <br /><br />
+          <label>Amount :</label>
+          <input
+            type="text"
+            name="amt"
+            required
+            placeholder="Enter Amount"
+            value="{{form_data.amt if form_data else ''}}"
+          />
+          {% if errors and errors.amt %}
+          <div class="error">{{errors.amt}}</div>
+          {% endif %}
+          <br /><br />
+          <label>Category :</label>
+          <input
+            type="text"
+            name="category"
+            required
+            placeholder="Enter Category"
+            value="{{form_data.category if form_data else ''}}"
+          />
+          {% if errors and errors.category %}
+          <div class="error">{{errors.category}}</div>
+          {% endif %}
+          <br /><br />
+          <button type="submit" class="add-btn">Add Expense</button><br /><br />
+        </form>
+      </div>
+      <h3>Search by Category</h3>
+      <form action="/" method="get">
+        <input type="text" name="category" placeholder="Enter Category" />
+        <button type="submit" class="add-btn">Search</button>
+      </form>
+      <h3>Total Expenses : ₹{{total}}</h3>
+      <table border="1">
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+        {% for i in expenses %}
+        <tr>
+          <td>{{i[1]}}</td>
+          <td>{{i[2]}}</td>
+          <td>{{i[3]}}</td>
+          <td>{{i[4]}}</td>
+          <td>
+            <form method="post" action="/delete" style="display: inline">
+              <input type="hidden" name="id" value="{{i[0]}}" />
+              <button type ="submit" class="delete-btn" onclick="return confirm('Are you sure ? ');">
+                Delete
+              </button>
+            </form>
+            <form action="/edit" method="get">
+              <input type="hidden" name="id" value="{{i[0]}}" />
+              <button type="submit" class="edit-btn">Edit</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %} {% if expenses| length==0 %}
+        <tr>
+          <td colspan="5">No results found</td>
+          {% endif %}
+        </tr>
+      </table>
+
+      <h3>Category Summary</h3>
+
+      <ul>
+        {% for cat, amt in summary.items() %}
+          <li>{{cat}} : ₹{{amt}} </li>
+        {% endfor %}
+      </ul>
+
+      <h3>Monthly Summary</h3>
+      <div class="summary-box">
+        {% if monthly %}
+      <ul>
+        {% for m, amt in monthly.items() %}
+        <div class="summary-item">
+          <span>{{m}}</span>
+          <span>₹{{amt}}</span>
+        </div>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No stats availaible</p>
+      {% endif %}
+      </div>
+
+    </div>
+  </body>
+</html>

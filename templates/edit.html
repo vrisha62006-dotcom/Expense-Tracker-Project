@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Expense</title>
+    <link rel="stylesheet" href="{{url_for('static', filename="style.css")}}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+    <h2>Edit Expense</h2> 
+    <form action="/update" method="post">
+        <input type="hidden" name="id" value="{{exp[0]}}">
+
+        Name : <input type="text" name="name" value="{{exp[1]}}" required><br><br>
+        Amount : <input type="text" name="amt" value="{{exp[2]}}" required><br><br>
+        Category : <input type="text" name="category" value="{{exp[3]}}" required><br><br>
+        <button type="submit" class="add-btn">Update</button>
+    </form>
+    </div>
+    </div>
+</body>
+</html>
